@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/QuestoesController')
-router.get('/questoes', controller.pesquisarTudo);
-router.get('/modoDeJogo/:modo', controller.pesquisarModos);
-router.get('/questoes/id/:id', controller.pesquisarPorId);
-router.get('/questoes/materia/:materia', controller.pesquisarPorMateria);
+const questaoController = require('../controllers/QuestoesController');
+const contaController = require('../controllers/ContaController');
+router.get('/questoes', questaoController.pesquisarTudo);
+router.get('/modoDeJogo/:modo', questaoController.pesquisarModos);
+router.get('/questoes/id/:id', questaoController.pesquisarPorId);
+router.get('/questoes/materia/:materia', questaoController.pesquisarPorMateria);
+router.post('/conta/criar',contaController.criarConta);
 module.exports = router;

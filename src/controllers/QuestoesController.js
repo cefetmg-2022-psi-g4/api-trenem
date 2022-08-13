@@ -44,12 +44,12 @@ exports.pesquisarModos = async (req, res, next) => {
 };
 
 
-
 exports.pesquisarPorId = async (req, res, next) => {
     const id = req.params.id;
     const questao = await QuestoesModel.findByPk(id);
     res.status(200).send(JSON.stringify(questao));
 };
+
 exports.pesquisarPorMateria = async (req, res, next) => {
     const materia = req.params.materia;
     const questoes = await QuestoesModel.findAll({
