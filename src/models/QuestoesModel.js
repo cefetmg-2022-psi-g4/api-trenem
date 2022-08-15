@@ -12,28 +12,28 @@ const QuestoesModel = sequelize.define("questoes",{
         primaryKey: true
     },
     origem: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
     },
     enunciado: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     alternativas: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     gabarito: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     materia: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     supertopico: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     topico: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     },
     subtopico: {
-        type: DataTypes.STRING
+        type: DataTypes.TEXT
     }
 });
 
