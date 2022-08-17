@@ -1,10 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-
-const sequelize = new Sequelize({
-    dialect: "sqlite",
-    storage: "../../data/trenem-db.sqlite",
-    logging: console.log,
-});
+const { DataTypes } = require('sequelize');
+const sequelize = require("../services/db.js");
 
 const QuestoesModel = sequelize.define("questoes",{
     id: {
@@ -36,5 +31,6 @@ const QuestoesModel = sequelize.define("questoes",{
         type: DataTypes.TEXT
     }
 });
+
 
 module.exports = QuestoesModel;

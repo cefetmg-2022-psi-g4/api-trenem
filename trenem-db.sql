@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS estudante (
     nome TEXT,
     percentualDeAcertos REAL,
     foto BLOB,
-    tempoMedio REAL,
+    tempoMedio REAL
 );
 
 CREATE TABLE IF NOT EXISTS amizades(

@@ -47,11 +47,11 @@ exports.pesquisarModos = async (req, res, next) => {
 
 exports.pesquisarPorId = async (req, res, next) => {
     try{
-        const id = req.params.id;
-        const questao = await QuestoesModel.findByPk(id);
-        res.status(200).send(JSON.stringify(questao));
-    }catch(err){
-        res.status(500).send(JSON.stringify(err));
+         const id = req.params.id;
+         const questao = await QuestoesModel.findByPk(id);
+         res.status(200).send(JSON.stringify(questao));
+     }catch(err){
+         res.status(500).send(JSON.stringify(err));
     }
 };
 
@@ -61,9 +61,9 @@ exports.pesquisarPorMateria = async (req, res, next) => {
         const questoes = await QuestoesModel.findAll({
             where: {
                 materia: materia,
-            },
+            }
         });
-        res.status(200).send(JSON.stringify(questoes));
+        res.status(200).send(JSON.stringify(questoes,null,2));
     }catch(err){
         res.status(500).send(JSON.stringify(err));
     }

@@ -1,13 +1,18 @@
-// testando ainda a utilidade disso - enzo
-
-const sqlite = require('better-sqlite3');
+const { Sequelize, DataTypes } = require('sequelize');
 const path = require('path');
-const db = new sqlite(path.resolve('trenem-db.sqlite'), {fileMustExist: true});
 
-function query(sql, params) {
-  return db.prepare(sql).all(params);
-}
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: path.resolve(__dirname,'../../data/trenem-db.sqlite'),
+    logging: console.log,
+});
 
-module.exports = {
-  query
-}
+sequelize
+    .authenticate()
+    .then(()=>{
+        console.log('Conexão funcionando!');
+    }).catch (err =>{
+        console.error('Não foi possível conectar devido a :',err);
+    });
+
+module.exports = sequelize;

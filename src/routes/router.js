@@ -6,5 +6,5 @@ router.get('/questoes', questaoController.pesquisarTudo);
 router.get('/modoDeJogo/:modo', questaoController.pesquisarModos);
 router.get('/questoes/id/:id', questaoController.pesquisarPorId);
 router.get('/questoes/materia/:materia', questaoController.pesquisarPorMateria);
-router.post('/conta/criar',contaController.criarConta);
+//router.post('/conta/criar',contaController.criarConta);
 module.exports = router;
