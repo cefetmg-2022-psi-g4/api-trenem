@@ -10,5 +10,6 @@ router.get('/modoDeJogo/:modo', questaoController.pesquisarModos);
 router.get('/questoes/id/:id', questaoController.pesquisarPorId);
 router.get('/questoes/materia/:materia', questaoController.pesquisarPorMateria);
 router.post('/conta/criarConta', jsonParser, estudanteController.criarConta);
+router.post('/conta/acessarConta', jsonParser, estudanteController.acessarConta);
 router.post('/verificarEmail', jsonParser, estudanteController.verificarEmail);
 module.exports = router;

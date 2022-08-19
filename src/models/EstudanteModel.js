@@ -10,10 +10,7 @@ const EstudanteModel = sequelize.define("estudante",{
         primaryKey: true
     },
     senha: {
-        type: DataTypes.STRING,
-        set(value){
-            this.setDataValue('password', hash(value));
-        }
+        type: DataTypes.STRING
     },
     cod: {
         type: DataTypes.INTEGER
