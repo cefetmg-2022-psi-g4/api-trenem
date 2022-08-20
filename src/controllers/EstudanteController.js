@@ -1,20 +1,33 @@
 const EstudanteModel = require("../models/EstudanteModel");
 const Encriptacao = require("../services/encriptacao");
+const sequelize = require("../services/db");
 
 exports.criarConta = async (req,res,next) => {
     try{
         const nome = req.body.nome;
         const email = req.body.email;
         const senha =  req.body.senha;
-        const hashSenha = await Encriptacao.gerarHash(senha);
+        const hashSenha = await  Encriptacao.gerarHash(senha);
         // const count = await EstudanteModel.destroy({where: { cod: 1 }});        
         const codEstudante = await EstudanteModel.count();
         const estudante = await EstudanteModel.create({nome: nome, email:email, senha:hashSenha, cod: codEstudante, foto: null, percentualDeAcertos: 0, tempoMedio: 0});
         res.status(200).send("Conta criada com sucesso!");
     }
     catch(err){
-        res.status(500).send(JSON.stringify(err));
+        res.status(500).send(JSON.stringify("erro ao criar conta: " + err));
     }  
+}
+
+exports.buscarNome = async (req,res,next) => {
+    try{
+        const nome = req.body.nome;
+        const cod = req.body.cod;
+        const results = await sequelize.query("SELECT * FROM estudante e WHERE e.nome LIKE '%" + nome + "%' AND e.cod <> " + cod);
+        res.status(200).send(JSON.stringify(results));
+    }
+    catch(err){
+        res.status(500).send(JSON.stringify("erro ao buscar nome: " + err));
+    }
 }
 
 exports.acessarConta = async (req,res,next) => {

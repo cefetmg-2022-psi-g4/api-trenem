@@ -34,6 +34,20 @@ CREATE TABLE IF NOT EXISTS amizades(
             ON UPDATE NO ACTION
 );
 
+CREATE TABLE IF NOT EXISTS pedidos_amizades(
+    codUsuario INTEGER,
+    codDestinatario INTEGER,
+    PRIMARY KEY (codUsuario, codDestinatario),
+    FOREIGN KEY (codUsuario) 
+        REFERENCES estudante (cod) 
+            ON DELETE CASCADE 
+            ON UPDATE NO ACTION,
+    FOREIGN KEY (codDestinatario) 
+        REFERENCES estudante (cod) 
+            ON DELETE CASCADE 
+            ON UPDATE NO ACTION
+);
+
 CREATE TABLE IF NOT EXISTS questoes_realizadas(
     codEstudante INTEGER,
     idQuestao INTEGER,
