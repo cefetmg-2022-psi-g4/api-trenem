@@ -3,6 +3,7 @@ const Encriptacao = require("../services/encriptacao");
 const sequelize = require("../services/db");
 
 exports.criarConta = async (req,res,next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try{
         const nome = req.body.nome;
         const email = req.body.email;
@@ -19,6 +20,7 @@ exports.criarConta = async (req,res,next) => {
 }
 
 exports.buscarNome = async (req,res,next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try{
         const nome = req.body.nome;
         const cod = req.body.cod;
@@ -31,6 +33,7 @@ exports.buscarNome = async (req,res,next) => {
 }
 
 exports.acessarConta = async (req,res,next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try{
         const email = req.body.email;
         const senha = req.body.senha;
@@ -51,6 +54,7 @@ exports.acessarConta = async (req,res,next) => {
 }
 
 exports.verificarEmail = async (req,res,next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try{
         const email = req.body.email;
 
