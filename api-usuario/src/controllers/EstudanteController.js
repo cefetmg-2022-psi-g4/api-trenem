@@ -1,6 +1,6 @@
 const EstudanteModel = require("../models/EstudanteModel");
-const Encriptacao = require("../../../services/encriptacao");
-const sequelize = require("../../../services/db");
+const Encriptacao = require("../services/encriptacao");
+const sequelize = require("../services/db");
 
 exports.criarConta = async (req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
