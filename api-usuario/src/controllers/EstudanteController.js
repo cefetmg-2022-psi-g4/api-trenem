@@ -69,3 +69,92 @@ exports.verificarEmail = async (req,res,next) => {
         res.status(500).send(JSON.stringify("Não foi possível pesquisar o email, devido: " + err));
     }
 }
+
+exports.alterarDados = async(req,res,next) => {
+    res.header("Acess-Control-Allow-Origin","*");
+    try{
+        const email = req.body.email;
+        const nome = req.body.nome;
+        const senha = req.body.senha;
+        const foto = req.body.foto;
+        const conta = await EstudanteModel.findByPk(email);
+        if(conta == null)
+            res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este email!"));
+        else{
+            const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
+            if(!senhaCorreta)
+                res.status(500).send(JSON.stringify("Senha incorreta!"));
+            else{
+                await EstudanteModel.update({nome : nome, foto : foto},
+                    {
+                        where: {
+                            email : email
+                        }
+                    });
+                res.status(200).send("Alterado com sucesso!");
+            }       
+        }
+    }
+    catch(err){
+        res.status(500).send(JSON.stringify("Não foi possível alterar os dados, devido: " + err));
+    }
+}
+
+exports.alterarDados = async(req,res,next) => {
+    res.header("Acess-Control-Allow-Origin","*");
+    try{
+        const email = req.body.email;
+        const nome = req.body.nome;
+        const senha = req.body.senha;
+        const foto = req.body.foto;
+        const conta = await EstudanteModel.findByPk(email);
+        if(conta == null)
+            res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este email!"));
+        else{
+            const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
+            if(!senhaCorreta)
+                res.status(500).send(JSON.stringify("Senha incorreta!"));
+            else{
+                await EstudanteModel.update({nome : nome, foto : foto},
+                    {
+                        where: {
+                            email : email
+                        }
+                    });
+                res.status(200).send("Alterado com sucesso!");
+            }       
+        }
+    }
+    catch(err){
+        res.status(500).send(JSON.stringify("Não foi possível alterar os dados, devido: " + err));
+    }
+}
+
+exports.alterarSenha = async(req,res,next) => {
+    res.header("Acess-Control-Allow-Origin","*");
+    try{
+        const email = req.body.email;
+        const senha = req.body.senha;
+        const conta = await EstudanteModel.findByPk(email);
+        if(conta == null)
+            res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este email!"));
+        else{
+            const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
+            if(!senhaCorreta)
+                res.status(500).send(JSON.stringify("Senha incorreta!"));
+            else{
+                const novaSenha = await Encriptacao.gerarHash(req.body.novaSenha);
+                await EstudanteModel.update({senha : novaSenha},
+                    {
+                        where: {
+                            email : email
+                        }
+                    });
+                res.status(200).send("Alterada com sucesso!");
+            }       
+        }
+    }
+    catch(err){
+        res.status(500).send(JSON.stringify("Não foi possível alterar a senha, devido: " + err));
+    }
+}
