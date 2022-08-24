@@ -23,7 +23,6 @@ exports.buscarNome = async (req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     try{
         const nome = req.body.nome;
-        const cod = req.body.cod;
         const results = await sequelize.query("SELECT * FROM estudante e WHERE e.nome LIKE '%" + nome + "%' AND e.cod <> " + cod);
         res.status(200).send(JSON.stringify(results));
     }

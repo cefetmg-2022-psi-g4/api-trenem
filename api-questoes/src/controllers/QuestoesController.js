@@ -1,5 +1,6 @@
 const QuestoesModel = require("../models/QuestoesModel");
 
+
 exports.pesquisarTudo = async (req, res, next) => {
     try{
         res.header("Access-Control-Allow-Origin", "*");
@@ -55,7 +56,7 @@ exports.pesquisarPorId = async (req, res, next) => {
     }
 };
 
-exports.pesquisarPorMateria = async (req, res, next) => {
+pesquisarPorMateria = async (materia) => {
     try{
         const materia = req.params.materia;
         const questoes = await QuestoesModel.findAll({
@@ -68,3 +69,14 @@ exports.pesquisarPorMateria = async (req, res, next) => {
         res.status(500).send(JSON.stringify(err));
     }
 };
+
+exports.selecionarQuestoes = async (req, res, next) => {
+    try{
+        const cod = req.body.cod;
+        const materia = req.body.materia;
+        const qtd = req.body.qtd;
+    }
+    catch(err){
+
+    }
+}
