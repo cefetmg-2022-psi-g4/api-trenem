@@ -1,7 +1,6 @@
 const PedidoModel = require("../models/PedidoModel");
 const AmizadeModel = require("../models/AmizadeModel");
 const EstudanteModel = require("../models/EstudanteModel");
-const { or } = require("sequelize/types");
 
 exports.enviarPedidoDeAmizade = async (req,res,next) => { 
     try{
@@ -10,7 +9,6 @@ exports.enviarPedidoDeAmizade = async (req,res,next) => {
         const codDestinatario = await EstudanteModel.findByPk(email);
         const pedido = await PedidoModel.create({codUsuario : cod, codDestinatario : codDestinatario.cod });
         res.status(200).send(JSON.stringify("Adicionado com sucesso!"));
-
     }
     catch(err){
         res.status(500).send(JSON.stringify("Erro ao enviar pedido de amizade: " + err));

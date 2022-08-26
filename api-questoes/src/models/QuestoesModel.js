@@ -32,31 +32,5 @@ const QuestoesModel = sequelize.define("questoes",{
     }
 });
 
-let questoes = new Array();
-const materias = ["matematica", "biologia", "quimica", "fisica", "historia", "linguagens", "geografia-sociologia-e-filosofia"];
+module.exports = {QuestoesModel};
 
-async function pegarQuestoes () {
-    for(materia of materias){
-        try{
-            const questoesMateria = await QuestoesModel.findAll({
-                where: {
-                    materia: materia,
-                }
-            });
-            questoes[materia] = questoesMateria;
-        }
-        catch(err){
-            console.log("Erro ao salvar as questoes de " + materia);
-        }
-    }
-    return questoes;
-};
-
-pegarQuestoes().then(()=>{
-        console.error('Pronto para a execução');
-        console.log(questoes);
-        module.exports = {QuestoesModel, questoes};
-    })
-    .catch(err=>{
-        console.error('Não foi possível conectar devido a :',err);
-    });

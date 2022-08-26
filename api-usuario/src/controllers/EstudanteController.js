@@ -12,7 +12,7 @@ exports.criarConta = async (req,res,next) => {
         // const count = await EstudanteModel.destroy({where: { cod: 1 }});        
         const codEstudante = await EstudanteModel.count();
         const estudante = await EstudanteModel.create({nome: nome, email:email, senha:hashSenha, cod: codEstudante, foto: null, percentualDeAcertos: 0, tempoMedio: 0});
-        res.status(200).send("Conta criada com sucesso!");
+        res.status(200).send(JSON.stringify(estudante));
     }
     catch(err){
         res.status(500).send(JSON.stringify("erro ao criar conta: " + err));
@@ -44,7 +44,7 @@ exports.acessarConta = async (req,res,next) => {
             if(!senhaCorreta)
                 res.status(500).send(JSON.stringify("Senha incorreta!"));
             else
-                res.status(200).send(JSON.stringify("Usuário logado com sucesso!"))
+                res.status(200).send(JSON.stringify(conta));
         }
     }
     catch(err){

@@ -1,50 +1,37 @@
-const {QuestoesModel,questoes} = require("../models/QuestoesModel");
+const {QuestoesModel} = require("../models/QuestoesModel");
+const {RealizadasModel} = require("../models/RealizadasModel");
 
+let ok = 0;
+let questoes = new Array();
+const materias = ["matematica", "biologia", "quimica", "fisica", "historia", "linguagens", "geografia-sociologia-e-filosofia"];
 
-// exports.pesquisarTudo = async (req, res, next) => {
-//     try{
-//         res.header("Access-Control-Allow-Origin", "*");
-//         const questoes = await QuestoesModel.findAll();
-//         res.status(200).send(
-//             JSON.stringify(questoes)
-//         );
-//     }catch(err){
-//         res.status(500).send(JSON.stringify(err));
-//     }
-// };
+async function pegarQuestoes () {
+    if(ok)return;
+    for(materia of materias){
+        try{
+            const questoesMateria = await QuestoesModel.findAll({
+                where: {
+                    materia: materia,
+                }
+            });
+            questoes[materia] = questoesMateria;
+        }
+        catch(err){
+            console.log("Erro ao salvar as questoes de " + materia);
+        }
+    }
+    ok = 1;
+};
 
-exports.pesquisarModos = async (req, res, next) => {
+exports.pesquisarTudo = async (req, res, next) => {
+    await pegarQuestoes();
     try{
-        const modo = req.params.modo;
         res.header("Access-Control-Allow-Origin", "*");
-        const modos = [{
-            id:'0',
-            nome:'Corrida Contra o Tempo',
-            descricao:'Este modo consiste em realizar questões antes que o tempo acabe.',
-        },
-        {
-            id:'1',
-            nome:'Provão',
-            descricao:'Neste modo, você fará algo parecido com um simulado com varias questões de diferentes matérias.',
-        },
-        {
-            id:'2',
-            nome:'Matérias',
-            descricao:'Neste modo você escolhe uma materia para realizar questões especificas.',
-        },
-        {
-            id:'3',
-            nome:'Versus',
-            descricao:'Neste modo você e um outro jogador terão um minuto para responderem questoẽs.',
-        }];
-        const result = modos.at(modo);
-
-        res.status(200).send(result);
-    } catch(err){
+        res.status(200).send("Questões pesquisadas!");
+    }catch(err){
         res.status(500).send(JSON.stringify(err));
     }
 };
-
 
 // exports.pesquisarPorId = async (req, res, next) => {
 //     try{
@@ -70,15 +57,83 @@ exports.pesquisarModos = async (req, res, next) => {
 //     }
 // };
 
-exports.selecionarQuestoes = async (req, res, next) => {
+
+const selecionarQuestoes = async (cod, materia, qtd) => {
+    await pegarQuestoes();
     try{
-        // const cod = req.body.cod;
-        // const materia = req.body.materia;
-        // const qtd = req.body.qtd;
-        console.log(questoes);
-        res.status(200).send(JSON.stringify(questoes));
+        const realizadasBd = await RealizadasModel.findAll({
+            where:{
+                codEstudante : cod
+            }
+        });
+
+        let realizadas = new Array();
+        
+        for(var i=0;i<realizadasBd.length;++i){
+            if(realizadasBd[i].idQuestao>=inicio&&realizadasBd[i].idQuestao<inicio+questoes[materia].length)
+                realizadas.push(realizadasBd[i].idQuestao);
+        }
+
+        realizadas.sort();
+
+        let lista = new Array(), idx = 0, inicio = questoes[materia][0].id;
+
+        for(var i=inicio;i<inicio+questoes[materia].length;++i){
+            
+            if(idx!=realizadas.length&&realizadas[idx]==i){
+                idx++;
+            }else{
+                lista.push(i);
+            }
+        }
+        
+        let selecionadas = new Array(), resposta = new Array();
+
+        while(qtd--){
+            let random = Math.random()*lista.length;
+
+            while(selecionadas.includes(random)){
+                random = Math.random()*lista.length;
+            }
+            
+            random = Math.floor(random);
+            selecionadas += random;
+            resposta.push(questoes[materia][random]);
+        }
+        return resposta;
     }
     catch(err){
-        res.status(500).send(JSON.stringify(err));
+        console.log(err);
     }
 }
+
+exports.criarProvao = async (req, res, next) => {
+    //10 questoes: 3 matematica, 2 port, 1 hist, 1 geo, 1 bio, 1 fis, 1 quis
+    await pegarQuestoes();
+    try{
+        const cod = req.body.cod;
+        let provao = new Array(), tmp = new Array();
+        tmp = await selecionarQuestoes(cod,'matematica',3);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'linguagens',2);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'historia',1);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'geografia-sociologia-e-filosofia',1);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'biologia',1);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'fisica',1);
+        provao = provao.concat(tmp);
+        tmp = await selecionarQuestoes(cod,'quimica',1);
+        provao = provao.concat(tmp);
+        let provaoRandomizado = provao
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+        res.status(200).send(JSON.stringify(provaoRandomizado));
+
+     }catch(err){
+         res.status(500).send(JSON.stringify(err));
+    }
+};
