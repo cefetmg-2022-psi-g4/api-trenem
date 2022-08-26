@@ -1,17 +1,17 @@
-const QuestoesModel = require("../models/QuestoesModel");
+const {QuestoesModel,questoes} = require("../models/QuestoesModel");
 
 
-exports.pesquisarTudo = async (req, res, next) => {
-    try{
-        res.header("Access-Control-Allow-Origin", "*");
-        const questoes = await QuestoesModel.findAll();
-        res.status(200).send(
-            JSON.stringify(questoes)
-        );
-    }catch(err){
-        res.status(500).send(JSON.stringify(err));
-    }
-};
+// exports.pesquisarTudo = async (req, res, next) => {
+//     try{
+//         res.header("Access-Control-Allow-Origin", "*");
+//         const questoes = await QuestoesModel.findAll();
+//         res.status(200).send(
+//             JSON.stringify(questoes)
+//         );
+//     }catch(err){
+//         res.status(500).send(JSON.stringify(err));
+//     }
+// };
 
 exports.pesquisarModos = async (req, res, next) => {
     try{
@@ -46,37 +46,39 @@ exports.pesquisarModos = async (req, res, next) => {
 };
 
 
-exports.pesquisarPorId = async (req, res, next) => {
-    try{
-         const id = req.params.id;
-         const questao = await QuestoesModel.findByPk(id);
-         res.status(200).send(JSON.stringify(questao));
-     }catch(err){
-         res.status(500).send(JSON.stringify(err));
-    }
-};
+// exports.pesquisarPorId = async (req, res, next) => {
+//     try{
+//          const id = req.params.id;
+//          const questao = await QuestoesModel.findByPk(id);
+//          res.status(200).send(JSON.stringify(questao));
+//      }catch(err){
+//          res.status(500).send(JSON.stringify(err));
+//     }
+// };
 
-pesquisarPorMateria = async (materia) => {
-    try{
-        const materia = req.params.materia;
-        const questoes = await QuestoesModel.findAll({
-            where: {
-                materia: materia,
-            }
-        });
-        res.status(200).send(JSON.stringify(questoes,null,2));
-    }catch(err){
-        res.status(500).send(JSON.stringify(err));
-    }
-};
+// pesquisarPorMateria = async (materia) => {
+//     try{
+//         const materia = req.params.materia;
+//         const questoes = await QuestoesModel.findAll({
+//             where: {
+//                 materia: materia,
+//             }
+//         });
+//         res.status(200).send(JSON.stringify(questoes,null,2));
+//     }catch(err){
+//         res.status(500).send(JSON.stringify(err));
+//     }
+// };
 
 exports.selecionarQuestoes = async (req, res, next) => {
     try{
-        const cod = req.body.cod;
-        const materia = req.body.materia;
-        const qtd = req.body.qtd;
+        // const cod = req.body.cod;
+        // const materia = req.body.materia;
+        // const qtd = req.body.qtd;
+        console.log(questoes);
+        res.status(200).send(JSON.stringify(questoes));
     }
     catch(err){
-
+        res.status(500).send(JSON.stringify(err));
     }
 }
