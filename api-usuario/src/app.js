@@ -9,6 +9,7 @@ const rotas = require('./routes/router');
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:19006');
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:19007');
 
     // Request methods you wish to allow
