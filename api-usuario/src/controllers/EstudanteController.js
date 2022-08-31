@@ -2,6 +2,24 @@ const EstudanteModel = require("../models/EstudanteModel");
 const Encriptacao = require("../services/encriptacao");
 const sequelize = require("../services/db");
 
+criarToken = async (estudante) => {
+    try{
+        const token = jwt.sign(
+            { "email": estudante.email,
+              "senha": estudante.senha
+            },
+            process.env.TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+        return token;
+    }
+    catch(err){
+        return err;
+    }
+}
+
 exports.criarConta = async (req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
     try{
@@ -12,6 +30,9 @@ exports.criarConta = async (req,res,next) => {
         // const count = await EstudanteModel.destroy({where: { cod: 1 }});        
         const codEstudante = await EstudanteModel.count();
         const estudante = await EstudanteModel.create({nome: nome, email:email, senha:hashSenha, cod: codEstudante, foto: null, percentualDeAcertos: 0, tempoMedio: 0});
+        
+        estudante.token = await this.criarToken(estudante);
+
         res.status(200).send(JSON.stringify(estudante));
     }
     catch(err){
@@ -44,12 +65,18 @@ exports.acessarConta = async (req,res,next) => {
             if(!senhaCorreta)
                 res.status(500).send(JSON.stringify("Senha incorreta!"));
             else
+                await this.criarToken(estudante);
+
                 res.status(200).send(JSON.stringify(conta));
         }
     }
     catch(err){
         res.status(500).send(JSON.stringify("Não foi possível acessar a conta devido: " + err));
     }   
+}
+
+exports.verificarToken = async (req,res,next) => {
+    
 }
 
 exports.verificarEmail = async (req,res,next) => {
