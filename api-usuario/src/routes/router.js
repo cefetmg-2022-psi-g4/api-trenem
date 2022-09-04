@@ -4,6 +4,9 @@ const jsonParser = bodyParser.json()
 const urlEncoderParser = bodyParser.urlencoded({extended: false})
 const router = express.Router();
 const estudanteController = require('../controllers/EstudanteController');
+const Auth = require("../middlewares/Auth");
+
+router.use(Auth);
 
 router.post('/conta/criarConta', jsonParser, estudanteController.criarConta);
 router.post('/conta/acessarConta', jsonParser, estudanteController.acessarConta);

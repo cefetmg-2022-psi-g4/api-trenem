@@ -1,24 +1,7 @@
 const EstudanteModel = require("../models/EstudanteModel");
 const Encriptacao = require("../services/encriptacao");
 const sequelize = require("../services/db");
-
-criarToken = async (estudante) => {
-    try{
-        const token = jwt.sign(
-            { "email": estudante.email,
-              "senha": estudante.senha
-            },
-            process.env.TOKEN_KEY,
-            {
-              expiresIn: "2h",
-            }
-          );
-        return token;
-    }
-    catch(err){
-        return err;
-    }
-}
+const Auth = require("../services/auth");
 
 exports.criarConta = async (req,res,next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -31,9 +14,9 @@ exports.criarConta = async (req,res,next) => {
         const codEstudante = await EstudanteModel.count();
         const estudante = await EstudanteModel.create({nome: nome, email:email, senha:hashSenha, cod: codEstudante, foto: null, percentualDeAcertos: 0, tempoMedio: 0});
         
-        estudante.token = await this.criarToken(estudante);
+        estudante.token = Auth.gerarToken(email);
 
-        res.status(200).send(JSON.stringify(estudante));
+        res.status(200).send(JSON.stringify({estudante, token: estudante.token}));
     }
     catch(err){
         res.status(500).send(JSON.stringify("erro ao criar conta: " + err));
@@ -64,10 +47,11 @@ exports.acessarConta = async (req,res,next) => {
             const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
             if(!senhaCorreta)
                 res.status(500).send(JSON.stringify("Senha incorreta!"));
-            else
-                await this.criarToken(estudante);
+            else{
+                conta.token = await Auth.gerarToken(conta);
 
                 res.status(200).send(JSON.stringify(conta));
+            }
         }
     }
     catch(err){
@@ -76,7 +60,16 @@ exports.acessarConta = async (req,res,next) => {
 }
 
 exports.verificarToken = async (req,res,next) => {
+    const token = req.headers['x-access-token'];
+    if (!token) return res.status(401).json({ auth: false, message: 'Nenhum token enviado.' });
     
+    jwt.verify(token, process.env.SECRET, function(err, decoded) {
+      if (err) return res.status(500).json({ auth: false, message: 'Failed to authenticate token.' });
+      
+      // se tudo estiver ok, salva no request para uso posterior
+      req.userId = decoded.id;
+      next();
+    });
 }
 
 exports.verificarEmail = async (req,res,next) => {
