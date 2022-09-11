@@ -6,13 +6,12 @@ const router = express.Router();
 const estudanteController = require('../controllers/EstudanteController');
 const Auth = require("../middlewares/Auth");
 
-router.use(Auth);
-
 router.post('/conta/criarConta', jsonParser, estudanteController.criarConta);
 router.post('/conta/acessarConta', jsonParser, estudanteController.acessarConta);
+router.post('/conta/autenticar', Auth, jsonParser, estudanteController.autenticar);
 router.post('/buscarNome', jsonParser, estudanteController.buscarNome);
 router.post('/verificarEmail', jsonParser, estudanteController.verificarEmail);
-router.post('/alterarDados', jsonParser, estudanteController.alterarDados);
-router.post('/alterarSenha', jsonParser, estudanteController.alterarSenha);
+router.post('/alterarDados', Auth, jsonParser, estudanteController.alterarDados);
+router.post('/alterarSenha', Auth, jsonParser, estudanteController.alterarSenha);
 
 module.exports = router;

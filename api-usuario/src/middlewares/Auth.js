@@ -13,7 +13,7 @@ module.exports = async (req, res, next) => {
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.SECRET);
 
-    req.userId = decoded.id;
+    req.email = decoded.email;
 
     return next();
   } catch (err) {
