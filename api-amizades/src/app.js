@@ -1,9 +1,9 @@
 const express = require('express');
 
 const app = express();
-const router = express.Router();
 //Rotas
-const rotas = require('./routes/router');
+
+const rotas = require("./routes/router");
 
 app.use(function (req, res, next) {
 

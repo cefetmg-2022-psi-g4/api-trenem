@@ -9,7 +9,7 @@ function normalizaPort(val) {
     if (port >= 0) {
         return port;
     }
-return false;
+    return false;
 }
 
 app.listen(port, function () {
