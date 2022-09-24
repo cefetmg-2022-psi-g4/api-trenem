@@ -11,5 +11,4 @@ router.post('/aceitarPedido',jsonParser, amizadeController.aceitarPedido);
 router.post('/recusarPedido',jsonParser, amizadeController.recusarPedido); 
 router.post('/removerAmigo',jsonParser, amizadeController.removerAmigo); 
 
-
 module.exports = router;
