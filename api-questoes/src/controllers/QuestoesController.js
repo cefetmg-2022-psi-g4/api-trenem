@@ -89,7 +89,7 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
         
         let selecionadas = new Array(), resposta = new Array();
 
-        while(qtd--){
+        while(qtd){
             let random = Math.random()*lista.length;
 
             while(selecionadas.includes(random)){
@@ -98,7 +98,10 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
             
             random = Math.floor(random);
             selecionadas += random;
-            resposta.push(questoes[materia][random]);
+            if(!questoes[materia][random].enunciado.includes('img')){
+                resposta.push(questoes[materia][random]);
+                qtd--;
+            }
         }
         return resposta;
     }
