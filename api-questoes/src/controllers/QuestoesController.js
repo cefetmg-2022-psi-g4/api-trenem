@@ -98,7 +98,7 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
             
             random = Math.floor(random);
             selecionadas += random;
-            if(!questoes[materia][random].enunciado.includes('img')){
+            if(!(questoes[materia][random].enunciado.includes('img') || questoes[materia][random].alternativas.includes('img'))){
                 resposta.push(questoes[materia][random]);
                 qtd--;
             }
