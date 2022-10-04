@@ -57,7 +57,6 @@ exports.pesquisarTudo = async (req, res, next) => {
 //     }
 // };
 
-
 const selecionarQuestoes = async (cod, materia, qtd) => {
     await pegarQuestoes();
     try{
@@ -66,18 +65,19 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
                 codEstudante : cod
             }
         });
-
-        let realizadas = new Array();
         
-        for(var i=0;i<realizadasBd.length;++i){
-            if(realizadasBd[i].idQuestao>=inicio&&realizadasBd[i].idQuestao<inicio+questoes[materia].length)
-                realizadas.push(realizadasBd[i].idQuestao);
-        }
-
-        realizadas.sort();
+        let realizadas = new Array();
 
         let lista = new Array(), idx = 0, inicio = questoes[materia][0].id;
-
+        
+        for(var i=0;i<realizadasBd.length;++i){
+            if(realizadasBd[i].idQuestao>=inicio&&realizadasBd[i].idQuestao<inicio+questoes[materia].length){
+                realizadas.push(realizadasBd[i].idQuestao);
+            }
+        }
+        
+        realizadas.sort();
+        
         for(var i=inicio;i<inicio+questoes[materia].length;++i){
             
             if(idx!=realizadas.length&&realizadas[idx]==i){
@@ -88,10 +88,10 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
         }
         
         let selecionadas = new Array(), resposta = new Array();
-
+        
         while(qtd){
             let random = Math.random()*lista.length;
-
+            
             while(selecionadas.includes(random)){
                 random = Math.random()*lista.length;
             }
@@ -103,12 +103,34 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
                 qtd--;
             }
         }
+
+
         return resposta;
     }
+
     catch(err){
         console.log(err);
     }
 }
+
+exports.pegarPorMateria = async(req, res, next) =>{
+    await pegarQuestoes();
+    try{
+        
+        const materiaPegar = req.body.materia;
+        const cod = req.body.cod;
+        const qtd = req.body.qtd;
+
+        let prova = new Array();
+
+        prova = await selecionarQuestoes(cod, materiaPegar, qtd);
+
+        res.status(200).send(JSON.stringify(prova));
+    }
+    catch(err){
+        console.log(err);
+    }
+} 
 
 exports.criarProvao = async (req, res, next) => {
     //10 questoes: 3 matematica, 2 port, 1 hist, 1 geo, 1 bio, 1 fis, 1 quis

@@ -7,6 +7,7 @@ const questaoController = require('../controllers/QuestoesController');
 
 // router.get('/questoes/id/:id', questaoController.pesquisarPorId);
 // router.get('/questoes/materia/:materia', questaoController.pesquisarPorMateria);
+router.post('/questoes/materias',jsonParser, questaoController.pegarPorMateria);
 router.post('/questoes/provao', jsonParser, questaoController.criarProvao);
 
 module.exports = router;

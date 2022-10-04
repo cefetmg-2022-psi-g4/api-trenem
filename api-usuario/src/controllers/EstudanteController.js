@@ -1,4 +1,5 @@
 const EstudanteModel = require("../models/EstudanteModel");
+const RealizadasModel = require("../../../api-questoes/src/models/RealizadasModel.js");
 const Encriptacao = require("../services/encriptacao");
 const sequelize = require("../services/db");
 const Auth = require("../services/auth");
@@ -196,3 +197,23 @@ exports.alterarSenha = async (req, res, next) => {
         res.status(500).send(JSON.stringify("Não foi possível alterar a senha, devido: " + err));
     }
 }
+
+
+// Em construção
+// exports.processarProva = async (req, res, next) => {
+//     res.header("Acess-Control-Allow-Origin", "*");
+//     try{
+//         const questoes = req.body.questoes;//vetor de objetos: {id:int, alternativa:char, gabarito:char}
+//         //caso o usuario nao fez a questao, alternativa = null
+//         let pontuacaoTotal = 0, numQuestoes = questoes.length;
+//         for(questao in questoes){
+//             if(questao.alternativa==questao.gabarito)pontuacaoTotal++;
+//             RealizadasModel.create({codEstudante: cod, idQuestao: idQuestao, alternativaMarcada: alternativas})
+//         }
+//         const idEstudante = req.body.id;
+
+//     }
+//     catch (err) {
+
+//     }
+// }
