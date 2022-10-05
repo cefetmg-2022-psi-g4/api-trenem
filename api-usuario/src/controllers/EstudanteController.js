@@ -1,5 +1,5 @@
 const EstudanteModel = require("../models/EstudanteModel");
-const RealizadasModel = require("../../../api-questoes/src/models/RealizadasModel.js");
+const RealizadasModel = require("../models/RealizadasModel");
 const Encriptacao = require("../services/encriptacao");
 const sequelize = require("../services/db");
 const Auth = require("../services/auth");
@@ -200,20 +200,33 @@ exports.alterarSenha = async (req, res, next) => {
 
 
 // Em construção
-// exports.processarProva = async (req, res, next) => {
-//     res.header("Acess-Control-Allow-Origin", "*");
-//     try{
-//         const questoes = req.body.questoes;//vetor de objetos: {id:int, alternativa:char, gabarito:char}
-//         //caso o usuario nao fez a questao, alternativa = null
-//         let pontuacaoTotal = 0, numQuestoes = questoes.length;
-//         for(questao in questoes){
-//             if(questao.alternativa==questao.gabarito)pontuacaoTotal++;
-//             RealizadasModel.create({codEstudante: cod, idQuestao: idQuestao, alternativaMarcada: alternativas})
-//         }
-//         const idEstudante = req.body.id;
-
-//     }
-//     catch (err) {
-
-//     }
-// }
+exports.processarProva = async (req, res, next) => {
+    res.header("Acess-Control-Allow-Origin", "*");
+    try{
+        const questoes = req.body.questoes, cod = req.body.cod;
+        let pontuacaoTotal = 0, numQuestoes = questoes.length;
+        //caso o usuario nao fez a questao, alternativa = null
+        //vetor de objetos: {id:integer, alternativa:string, gabarito:string}
+        for(let i=0;i<numQuestoes;i++){
+            let questao = questoes[i];
+            if(questao.alternativa==questao.gabarito){
+                pontuacaoTotal++;
+            }
+            await RealizadasModel.create({codEstudante: cod, idQuestao: questao.idQuestao, alternativaMarcada: questao.alternativa})
+        }
+        await EstudanteModel.update({
+             totalAcertos: this.totalAcertos + pontuacaoTotal,
+             totalQuestoesFeitas: this.totalQuestoesFeitas + numQuestoes,
+            },
+            {
+                where: {
+                    cod: cod
+                }
+        });
+        //simplesmente retorna o número de acertos
+        res.status(200).send(JSON.stringify(pontuacaoTotal));
+    }
+    catch (err) {
+        res.status(500).send(JSON.stringify("Não foi possível processar a prova do usuário, devido ao erro: " + err));
+    }
+}

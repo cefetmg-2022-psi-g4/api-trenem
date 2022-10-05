@@ -14,6 +14,8 @@ router.post('/buscarNome', jsonParser, estudanteController.buscarNome);
 router.post('/verificarEmail', jsonParser, estudanteController.verificarEmail);
 router.post('/alterarDados', Auth, jsonParser, estudanteController.alterarDados);
 router.post('/alterarSenha', Auth, jsonParser, estudanteController.alterarSenha);
+router.post('/processarProva', jsonParser, estudanteController.processarProva);
+
 // router.post('/enviarProva', Auth, jsonParser, );
 
 module.exports = router;
