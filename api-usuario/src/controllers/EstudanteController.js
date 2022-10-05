@@ -39,7 +39,9 @@ exports.buscarNome = async (req, res, next) => {
 exports.getCod = async (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     try {
-        const email = req.email;
+        const email = req.body.email;
+        console.log(email);
+        console.log("requisicao chegou");
         const conta = await EstudanteModel.findByPk(email);
         if (conta == null)
             res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este token!"));

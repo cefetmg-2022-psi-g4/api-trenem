@@ -9,7 +9,7 @@ const Auth = require("../middlewares/Auth");
 router.post('/conta/criarConta', jsonParser, estudanteController.criarConta);
 router.post('/conta/acessarConta', jsonParser, estudanteController.acessarConta);
 router.post('/conta/autenticar', Auth, jsonParser, estudanteController.autenticar);
-router.post('/getCod', Auth, jsonParser, estudanteController.getCod);
+router.post('/getCod', jsonParser, estudanteController.getCod);
 router.post('/buscarNome', jsonParser, estudanteController.buscarNome);
 router.post('/verificarEmail', jsonParser, estudanteController.verificarEmail);
 router.post('/alterarDados', Auth, jsonParser, estudanteController.alterarDados);
