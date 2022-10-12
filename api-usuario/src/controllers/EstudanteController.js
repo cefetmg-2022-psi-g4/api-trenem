@@ -141,36 +141,6 @@ exports.alterarDados = async (req, res, next) => {
     }
 }
 
-exports.alterarDados = async (req, res, next) => {
-    res.header("Acess-Control-Allow-Origin", "*");
-    try {
-        const email = req.body.email;
-        const nome = req.body.nome;
-        const senha = req.body.senha;
-        const foto = req.body.foto;
-        const conta = await EstudanteModel.findByPk(email);
-        if (conta == null)
-            res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este email!"));
-        else {
-            const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
-            if (!senhaCorreta)
-                res.status(500).send(JSON.stringify("Senha incorreta!"));
-            else {
-                await EstudanteModel.update({ nome: nome, foto: foto },
-                    {
-                        where: {
-                            email: email
-                        }
-                    });
-                res.status(200).send("Alterado com sucesso!");
-            }
-        }
-    }
-    catch (err) {
-        res.status(500).send(JSON.stringify("Não foi possível alterar os dados, devido: " + err));
-    }
-}
-
 exports.alterarSenha = async (req, res, next) => {
     res.header("Acess-Control-Allow-Origin", "*");
     try {
@@ -200,8 +170,6 @@ exports.alterarSenha = async (req, res, next) => {
     }
 }
 
-
-// Em construção
 exports.processarProva = async (req, res, next) => {
     res.header("Acess-Control-Allow-Origin", "*");
     try{
@@ -230,5 +198,20 @@ exports.processarProva = async (req, res, next) => {
     }
     catch (err) {
         res.status(500).send(JSON.stringify("Não foi possível processar a prova do usuário, devido ao erro: " + err));
+    }
+}
+
+exports.getEstudantes = async(req,res,next) =>{
+    res.header("Acess-Control-Allow-Origin", "*");
+    
+    try{
+        const estudantes = await EstudanteModel.findAll({
+            attributes: ['percentualDeAcertos', 'totalAcertos', 'email', 'nome', 'cod']
+        });    
+        res.status(200).send(JSON.stringify(estudantes));
+    }
+
+    catch(err){
+        res.status(500).send(JSON.stringify("Não foi possível processar os estudantes devido a: " + err));
     }
 }

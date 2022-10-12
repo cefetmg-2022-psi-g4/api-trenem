@@ -4,26 +4,47 @@ const EstudanteModel = require("../models/EstudanteModel");
 
 exports.enviarRankingGeral = async (req, res, next) => {
     try {
-        let objeto = {"email":"guima@gmail.com"};
-        await fetch("http://localhost:3001/getCod", {
-            method: 'POST', // or 'PUT'
+        await fetch("http://localhost:3001/getEstudantes", {
+            method: 'GET', 
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(objeto),
         })  
         .then((response) => response.json())
-        .then((data) => res.status(200).send(JSON.stringify(data)));
-
+        .then((data) => {
+            data.sort(function(a,b){
+                if(a.percentualDeAcertos == b.percentualDeAcertos){
+                  return a.totalAcertos>b.totalAcertos ? -1 : 1;
+                }
+                return a.percentualDeAcertos > b.percentualDeAcertos ? -1 : 1;
+            });
+            res.status(200).send(JSON.stringify(data));
+        });
     } catch (err){
-        console.log("erro: "+err);
+        res.status(500).send("Não foi possível pegar o ranking geral devido ao erro : "+err);
     }
 }
 
 exports.enviarRankingAmigos = async (req, res, next) => {
     try {
-
+        await fetch("http://localhost:3002/listarAmigos", {
+            method: 'POST', 
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(req.body)
+        })  
+        .then((response) => response.json())
+        .then((data) => {
+            data.sort(function(a,b){
+                if(a.percentualDeAcertos == b.percentualDeAcertos){
+                  return a.totalAcertos>b.totalAcertos ? -1 : 1;
+                }
+                return a.percentualDeAcertos > b.percentualDeAcertos ? -1 : 1;
+            });
+            res.status(200).send(JSON.stringify(data));
+        });
     } catch (err){
-
+        res.status(500).send("Não foi possível pegar o ranking de amigos devido ao erro : "+err);
     }
 }

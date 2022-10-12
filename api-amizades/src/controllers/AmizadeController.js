@@ -85,7 +85,17 @@ exports.listarAmigos = async (req,res,next) => {
                 codEstudante: cod
             }
         });
-        res.status(200).send(amigos);
+        let resposta = []
+        for (const amigo of amigos) {
+            let item = await EstudanteModel.findAll({
+                attributes: ['percentualDeAcertos', 'totalAcertos', 'email', 'nome', 'cod'],
+                where: {
+                    cod: amigo.codAmigo
+                }
+            });
+            resposta.push(item);
+        }
+        res.status(200).send(resposta);
     }
     catch(err){
         res.status(500).send("Erro ao listar os amigos");
