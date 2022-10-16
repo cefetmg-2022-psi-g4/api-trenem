@@ -18,7 +18,7 @@ const EstudanteModel = sequelize.define("estudante",{
     foto:{
         type: DataTypes.BLOB
     },
-    totalAcertos: {
+    percentualDeAcertos: {
         type: DataTypes.REAL
     },
     tempoMedio:{

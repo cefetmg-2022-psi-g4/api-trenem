@@ -30,6 +30,9 @@ const QuestoesModel = sequelize.define("questoes",{
     subtopico: {
         type: DataTypes.TEXT
     }
+}, {
+    freezeTableName: true,
+    timestamps: false
 });
 
 module.exports = {QuestoesModel};
