@@ -39,7 +39,7 @@ exports.buscarNome = async (req, res, next) => {
 exports.getCod = async (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     try {
-        const email = req.body.email;
+        const email = req.email;
         console.log(email);
         console.log("requisicao chegou");
         const conta = await EstudanteModel.findByPk(email);

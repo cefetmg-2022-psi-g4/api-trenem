@@ -3,7 +3,7 @@ const path = require('path');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: path.resolve(__dirname,'../../../data/trenem-db.sqlite'),
+    storage: path.resolve(__dirname,'../../../data/trenem-db.db'),
     logging: console.log,
 });
 
