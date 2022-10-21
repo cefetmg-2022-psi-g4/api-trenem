@@ -57,31 +57,31 @@ exports.pesquisarTudo = async (req, res, next) => {
 //     }
 // };
 
-const selecionarQuestoes = async (cod, materia, qtd) => {
+const selecionarQuestoes = async (codArray, materia, qtd) => {
     await pegarQuestoes();
     try{
-        const realizadasBd = await RealizadasModel.findAll({
-            where:{
-                codEstudante : cod
-            }
-        });
-        
         let realizadas = new Array();
-
         let lista = new Array(), idx = 0, inicio = questoes[materia][0].id;
-        
-        for(var i=0;i<realizadasBd.length;++i){
-            if(realizadasBd[i].idQuestao>=inicio&&realizadasBd[i].idQuestao<inicio+questoes[materia].length){
-                realizadas.push(realizadasBd[i].idQuestao);
+
+        for (const cod in codArray) {
+            const realizadasBd = await RealizadasModel.findAll({
+                where:{
+                    codEstudante : cod
+                }
+            });
+            
+            for(var i=0;i<realizadasBd.length;++i){
+                if(realizadasBd[i].idQuestao>=inicio&&realizadasBd[i].idQuestao<inicio+questoes[materia].length){
+                    realizadas.push(realizadasBd[i].idQuestao);
+                }
             }
         }
         
         realizadas.sort();
         
         for(var i=inicio;i<inicio+questoes[materia].length;++i){
-            
-            if(idx!=realizadas.length&&realizadas[idx]==i){
-                idx++;
+            if(idx!=realizadas.length){
+                while(idx!=realizadas.length&&realizadas[idx]==i)idx++;
             }else{
                 lista.push(i);
             }
@@ -98,10 +98,8 @@ const selecionarQuestoes = async (cod, materia, qtd) => {
             
             random = Math.floor(random);
             selecionadas += random;
-            if(!(questoes[materia][random].enunciado.includes('img') || questoes[materia][random].alternativas.includes('img'))){
-                resposta.push(questoes[materia][random]);
-                qtd--;
-            }
+            resposta.push(questoes[materia][random]);
+            qtd--;
         }
 
 
@@ -134,6 +132,7 @@ exports.pegarPorMateria = async(req, res, next) =>{
 
 exports.criarProvao = async (req, res, next) => {
     //10 questoes: 3 matematica, 2 port, 1 hist, 1 geo, 1 bio, 1 fis, 1 quis
+    //atenção! caso seja um provão para mais de um usuário, cod deve ser um array no JSON!
     await pegarQuestoes();
     try{
         const cod = req.body.cod;

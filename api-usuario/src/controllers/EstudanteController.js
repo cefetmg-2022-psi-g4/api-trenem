@@ -203,7 +203,6 @@ exports.processarProva = async (req, res, next) => {
 
 exports.getEstudantes = async(req,res,next) =>{
     res.header("Acess-Control-Allow-Origin", "*");
-    
     try{
         const estudantes = await EstudanteModel.findAll({
             attributes: ['percentualDeAcertos', 'totalAcertos', 'email', 'nome', 'cod']
