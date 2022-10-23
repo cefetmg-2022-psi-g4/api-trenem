@@ -1,7 +1,5 @@
 const fetch = require('node-fetch');
 
-const EstudanteModel = require("../models/EstudanteModel");
-
 exports.enviarRankingGeral = async (req, res, next) => {
     try {
         await fetch("http://localhost:3001/getEstudantes", {

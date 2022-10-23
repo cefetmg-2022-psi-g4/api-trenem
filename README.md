@@ -1,1 +1,1 @@
-# Api's do projeto Trenem, respectivamente de questoes e usuários!
+# Api's do projeto Trenem, respectivamente de questoes, usuários, ranking e amizades!
