@@ -57,6 +57,12 @@ exports.pesquisarTudo = async (req, res, next) => {
 //     }
 // };
 
+// recebe o código do remetente e do destinatário.
+//vai enviar uma requisição pra api-jogoOnline pedindo para criar
+//uma linha na tabela de pedidos de jogos do destinatário
+
+//front end vai receber os pedidos de jogos consultando essa mesma api
+
 const selecionarQuestoes = async (codArray, materia, qtd) => {
     await pegarQuestoes();
     try{
@@ -91,13 +97,12 @@ const selecionarQuestoes = async (codArray, materia, qtd) => {
         
         while(qtd){
             let random = Math.random()*lista.length;
-            
             while(selecionadas.includes(random)){
                 random = Math.random()*lista.length;
             }
-            
             random = Math.floor(random);
             selecionadas += random;
+            if(questoes[materia][random].includes('src="../'))continue;
             resposta.push(questoes[materia][random]);
             qtd--;
         }
