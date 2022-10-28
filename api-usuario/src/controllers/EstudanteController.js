@@ -64,8 +64,7 @@ exports.acessarConta = async (req, res, next) => {
             res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este email!"));
         else {
             const senhaCorreta = await Encriptacao.compararHash(senha, conta.senha);
-            if (!senhaCorreta)
-                res.status(500).send(JSON.stringify("Senha incorreta!"));
+            if (!senhaCorreta)res.status(500).send(JSON.stringify("Senha incorreta!"));
             else {
                 const token = Auth.gerarToken(conta.email);
 

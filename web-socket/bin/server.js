@@ -1,21 +1,18 @@
-const app = require('../src/app');
-const appws = require('../src/app-ws.js')
-const port = normalizaPort(process.env.PORT || '3010');
-const port2 = normalizaPort(process.env.PORT || '3011');
+const httpServer = require("http").createServer();
+const { off } = require("process");
+const Auth = require("../middlewares/Auth");
 
-function normalizaPort(val) {
-    const port = parseInt(val, 10);
-    if (isNaN(port)) {
-        return val;
-    }
-    if (port >= 0) {
-        return port;
-    }
-    return false;
-}
+const io = require("socket.io")(httpServer, {
+    cors: {
+        origin: ["http://localhost:19006"],
+        methods: ["GET", "POST"]
+      }
+});
 
-app.listen(port, function () {
-    console.log(`App listening on port ${port}`)
-})
+io.on("connection", (socket) => {
+    console.log("Nós no trampo ");
+});
 
-appws(port2);
+
+
+httpServer.listen(3010);
