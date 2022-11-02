@@ -102,7 +102,8 @@ const selecionarQuestoes = async (codArray, materia, qtd) => {
             }
             random = Math.floor(random);
             selecionadas += random;
-            if(questoes[materia][random].includes('src="../'))continue;
+            // console.log(typeof(questoes[materia][random]));
+            if(questoes[materia][random].enunciado.includes('src="../'))continue;
             resposta.push(questoes[materia][random]);
             qtd--;
         }
