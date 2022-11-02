@@ -172,16 +172,17 @@ exports.alterarSenha = async (req, res, next) => {
 exports.processarProva = async (req, res, next) => {
     res.header("Acess-Control-Allow-Origin", "*");
     try{
-        const questoes = req.body.questoes, cod = req.body.cod;
+        const questoes = req.body.questoes, email = req.email, alternativas = req.body.alternativas;
+        const cod = await EstudanteModel.findByPk(email).cod;
         let pontuacaoTotal = 0, numQuestoes = questoes.length;
         //caso o usuario nao fez a questao, alternativa = null
         //vetor de objetos: {id:integer, alternativa:string, gabarito:string}
         for(let i=0;i<numQuestoes;i++){
             let questao = questoes[i];
-            if(questao.alternativa==questao.gabarito){
+            if(alternativas[i]==questao.gabarito){
                 pontuacaoTotal++;
             }
-            await RealizadasModel.create({codEstudante: cod, idQuestao: questao.idQuestao, alternativaMarcada: questao.alternativa})
+            await RealizadasModel.create({codEstudante: cod, idQuestao: questao.idQuestao, alternativaMarcada: alternativas[i]})
         }
         await EstudanteModel.update({
              totalAcertos: this.totalAcertos + pontuacaoTotal,
