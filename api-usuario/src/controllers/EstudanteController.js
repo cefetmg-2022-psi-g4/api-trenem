@@ -40,8 +40,6 @@ exports.getCod = async (req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
     try {
         const email = req.email;
-        console.log(email);
-        console.log("requisicao chegou");
         const conta = await EstudanteModel.findByPk(email);
         if (conta == null)
             res.status(500).send(JSON.stringify("Não existe nenhuma conta associada à este token!"));
@@ -173,7 +171,8 @@ exports.processarProva = async (req, res, next) => {
     res.header("Acess-Control-Allow-Origin", "*");
     try{
         const questoes = req.body.questoes, email = req.email, alternativas = req.body.alternativas;
-        const cod = await EstudanteModel.findByPk(email).cod;
+        const conta = await EstudanteModel.findByPk(email);
+        const cod = conta.cod;
         let pontuacaoTotal = 0, numQuestoes = questoes.length;
         //caso o usuario nao fez a questao, alternativa = null
         //vetor de objetos: {id:integer, alternativa:string, gabarito:string}
@@ -182,7 +181,7 @@ exports.processarProva = async (req, res, next) => {
             if(alternativas[i]==questao.gabarito){
                 pontuacaoTotal++;
             }
-            await RealizadasModel.create({codEstudante: cod, idQuestao: questao.idQuestao, alternativaMarcada: alternativas[i]})
+            await RealizadasModel.create({codEstudante: cod, idQuestao: questao.id, alternativaMarcada: alternativas[i]})
         }
         await EstudanteModel.update({
              totalAcertos: this.totalAcertos + pontuacaoTotal,
