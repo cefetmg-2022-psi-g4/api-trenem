@@ -24,9 +24,6 @@ const EstudanteModel = sequelize.define("estudante",{
     tempoMedio:{
         type: DataTypes.REAL
     },
-    token: {
-        type: DataTypes.STRING
-    },
     totalQuestoesFeitas: {
         type: DataTypes.INTEGER
     },

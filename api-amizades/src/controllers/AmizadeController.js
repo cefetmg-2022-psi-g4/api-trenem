@@ -7,8 +7,20 @@ exports.enviarPedidoDeAmizade = async (req,res,next) => {
         const email = req.body.email;
         const cod = req.body.cod;
         const codDestinatario = await EstudanteModel.findByPk(email);
-        const pedido = await PedidoModel.create({codUsuario : cod, codDestinatario : codDestinatario.cod });
-        res.status(200).send(JSON.stringify("Adicionado com sucesso!"));
+        const pedidoExiste = await PedidoModel.findOne({
+            where: {
+                codUsuario: cod,
+                codDestinatario: codDestinatario.cod,
+            }            
+        });
+
+        if(pedidoExiste == null){
+            const pedido = await PedidoModel.create({codUsuario : cod, codDestinatario : codDestinatario.cod });
+            res.status(200).send(JSON.stringify("Adicionado com sucesso!"));
+        } else {
+            res.status(201).send(JSON.stringify("Pedido já existe!"));
+        }
+        
     }
     catch(err){
         res.status(500).send(JSON.stringify("Erro ao enviar pedido de amizade: " + err));
