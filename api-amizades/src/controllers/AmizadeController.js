@@ -107,7 +107,7 @@ exports.listarAmigos = async (req,res,next) => {
             });
             resposta.push(item);
         }
-        res.status(200).send(resposta);
+        res.status(200).send(JSON.stringify(resposta));
     }
     catch(err){
         res.status(500).send("Erro ao listar os amigos");
@@ -126,3 +126,27 @@ exports.listarAmigosEmComum = async (req,res,next) => {
     }
 }
 
+exports.listarPedidos = async (req,res,next) => {
+    try{
+        const cod = req.body.cod;
+        const pedidos = await PedidoModel.findAll({
+            where: {
+                codDestinatario: cod
+            }
+        });
+        let resposta = []
+        for (const pedido of pedidos) {
+            let item = await EstudanteModel.findAll({
+                attributes: ['email', 'nome', 'cod'],
+                where: {
+                    cod: pedido.codUsuario
+                }
+            });
+            resposta.push(item);
+        }
+        res.status(200).send(JSON.stringify(resposta));
+    }
+    catch(err){
+        res.status(500).send("Erro ao listar os pedidos");
+    }
+}
