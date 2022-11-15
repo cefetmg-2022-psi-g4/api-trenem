@@ -31,11 +31,11 @@ exports.aceitarPedido = async (req,res,next) => {
     try{
         const cod = req.body.cod;
         const email = req.body.email;
-        const codDestianatario = await EstudanteModel.findByPk(email);
+        const codDestinatario = await EstudanteModel.findByPk(email);
         await PedidoModel.destroy({
             where: {
-              codUsuario: cod,
-              codDestinatario: codDestinatario.cod
+              codUsuario: codDestinatario.cod,
+              codDestinatario: cod
             }
         });
         const amizade1 = await AmizadeModel.create({codEstudante:cod, codAmigo: codDestinatario.cod});
@@ -99,7 +99,7 @@ exports.listarAmigos = async (req,res,next) => {
         });
         let resposta = []
         for (const amigo of amigos) {
-            let item = await EstudanteModel.findAll({
+            let item = await EstudanteModel.findOne({
                 attributes: ['percentualDeAcertos', 'totalAcertos', 'email', 'nome', 'cod'],
                 where: {
                     cod: amigo.codAmigo
@@ -136,7 +136,7 @@ exports.listarPedidos = async (req,res,next) => {
         });
         let resposta = []
         for (const pedido of pedidos) {
-            let item = await EstudanteModel.findAll({
+            let item = await EstudanteModel.findOne({
                 attributes: ['email', 'nome', 'cod'],
                 where: {
                     cod: pedido.codUsuario

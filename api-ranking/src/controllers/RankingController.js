@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 
 exports.enviarRankingGeral = async (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try {
         await fetch("http://localhost:3001/getEstudantes", {
             method: 'GET', 
@@ -24,6 +25,7 @@ exports.enviarRankingGeral = async (req, res, next) => {
 }
 
 exports.enviarRankingAmigos = async (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
     try {
         await fetch("http://localhost:3002/listarAmigos", {
             method: 'POST', 
