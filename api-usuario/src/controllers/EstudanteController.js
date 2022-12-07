@@ -178,20 +178,22 @@ exports.processarProva = async (req, res, next) => {
         //vetor de objetos: {id:integer, alternativa:string, gabarito:string}
         for(let i=0;i<numQuestoes;i++){
             let questao = questoes[i];
-            if(alternativas[i]==questao.gabarito){
+            if(questao.gabarito.includes(alternativas[i])){
                 pontuacaoTotal++;
             }
             await RealizadasModel.create({codEstudante: cod, idQuestao: questao.id, alternativaMarcada: alternativas[i]})
         }
+        
         await EstudanteModel.update({
-             totalAcertos: this.totalAcertos + pontuacaoTotal,
-             totalQuestoesFeitas: this.totalQuestoesFeitas + numQuestoes,
+             totalAcertos: conta.totalAcertos + pontuacaoTotal,
+             totalQuestoesFeitas: conta.totalQuestoesFeitas + numQuestoes,
+             percentualDeAcertos: conta.totalAcertos + pontuacaoTotal / conta.totalQuestoesFeitas + numQuestoes,
             },
             {
                 where: {
                     cod: cod
                 }
-        });
+            });
         //simplesmente retorna o número de acertos
         res.status(200).send(JSON.stringify(pontuacaoTotal));
     }
@@ -211,5 +213,22 @@ exports.getEstudantes = async(req,res,next) =>{
 
     catch(err){
         res.status(500).send(JSON.stringify("Não foi possível processar os estudantes devido a: " + err));
+    }
+}
+
+exports.getEstudante = async(req,res,next) =>{
+    res.header("Acess-Control-Allow-Origin", "*");
+    try{
+        const estudante = await EstudanteModel.findOne({
+            attributes: ['percentualDeAcertos', 'totalAcertos', 'email', 'nome', 'cod'],
+            where: {
+                cod: req.body.cod
+            }
+        });    
+        res.status(200).send(JSON.stringify(estudante));
+    }
+
+    catch(err){
+        res.status(500).send(JSON.stringify("Não foi possível processar o estudante devido a: " + err));
     }
 }

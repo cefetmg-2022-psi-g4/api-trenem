@@ -16,6 +16,7 @@ router.post('/alterarDados', Auth, jsonParser, estudanteController.alterarDados)
 router.post('/alterarSenha', Auth, jsonParser, estudanteController.alterarSenha);
 router.post('/processarProva', Auth, jsonParser, estudanteController.processarProva);
 router.get('/getEstudantes', jsonParser, estudanteController.getEstudantes);
+router.post('/getEstudante', jsonParser, estudanteController.getEstudante);
 // router.post('/enviarProva', Auth, jsonParser, );
 
 module.exports = router;

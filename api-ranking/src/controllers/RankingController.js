@@ -35,14 +35,25 @@ exports.enviarRankingAmigos = async (req, res, next) => {
             body: JSON.stringify(req.body)
         })  
         .then((response) => response.json())
-        .then((data) => {
-            data.sort(function(a,b){
-                if(a.percentualDeAcertos == b.percentualDeAcertos){
-                  return a.totalAcertos>b.totalAcertos ? -1 : 1;
-                }
-                return a.percentualDeAcertos > b.percentualDeAcertos ? -1 : 1;
+        .then(async (data) => {
+            await fetch("http://localhost:3001/getEstudante", {
+                method: 'POST', 
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(req.body)
+            })
+            .then((r) => r.json())
+            .then((d) => {
+                data.push(d);
+                data.sort(function(a,b){
+                    if(a.percentualDeAcertos == b.percentualDeAcertos){
+                      return a.totalAcertos>b.totalAcertos ? -1 : 1;
+                    }
+                    return a.percentualDeAcertos > b.percentualDeAcertos ? -1 : 1;
+                });
+                res.status(200).send(JSON.stringify(data));
             });
-            res.status(200).send(JSON.stringify(data));
         });
     } catch (err){
         res.status(500).send("Não foi possível pegar o ranking de amigos devido ao erro : "+err);
